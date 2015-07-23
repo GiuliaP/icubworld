@@ -1,0 +1,49 @@
+
+<application>
+<name>iCubWorld Dumpers</name>
+
+        <!-- Modules -->
+        
+	<module>
+                <name>dataDumper</name>
+		<parameters> --name /dump/iCubWorldManager/img:o --dir dumping/imgs --type image</parameters>
+		<node>localhost</node>
+		<tag>dumperImgs</tag>
+        </module>
+		
+	<module>
+                <name>dataDumper</name>
+		<parameters> --name /dump/iCubWorldManager/imginfo:o --dir dumping/imginfos --type bottle</parameters>
+		<node>localhost</node>
+		<tag>dumperClasses</tag>
+        </module>
+	
+	<module>
+                <name>dataDumper</name>
+		<parameters> --name /dump/iCubWorldManager/crop:o --dir dumping/crops --type image</parameters>
+		<node>localhost</node>
+		<tag>dumperCrops</tag>
+        </module>
+	
+        <!-- Connections -->
+
+	<connection>
+                <from>/iCubWorldManager/img:o</from>
+                <to>/dump/iCubWorldManager/img:o</to>
+                <protocol>mcast</protocol>
+        </connection>
+		
+	<connection>
+                <from>/iCubWorldManager/imginfo:o</from>
+                <to>/dump/iCubWorldManager/imginfo:o</to>
+                <protocol>tcp</protocol>
+        </connection>
+		
+	<connection>
+                <from>/iCubWorldManager/crop:o</from>
+                <to>/dump/iCubWorldManager/crop:o</to>
+                <protocol>mcast</protocol>
+        </connection>
+		
+</application>
+

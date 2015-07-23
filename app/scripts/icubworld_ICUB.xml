@@ -1,0 +1,146 @@
+
+<application>
+<name>iCub World Acquisition</name>
+
+        <dependencies>
+                <port>/icub/camcalib/left/out</port>
+                <port>/SFM/disp:o</port>
+        </dependencies>
+
+        <!-- Modules -->
+        
+        <module>
+                <name>motionCUT</name>
+                <parameters>--name motionCUT/left --coverXratio 0.7 --coverYratio 0.7 --framesPersistence 2 --numThreads 5 --nodesStep 6</parameters>
+                <node>icub12</node>
+                <tag>motionCUTLeft</tag>
+        </module>
+	
+		<module>
+                <name>nearBlobber</name>
+                <node>icub12</node>
+                <tag>nearBlobberLeft</tag>
+        </module>
+        
+		<module>
+                <name>actionsRenderingEngine</name>
+                <parameters>--motor:eyes_traj_time 2.0 --motor:neck_traj_time 3.5 --motor:block_eyes 0.0</parameters>
+                <node>icub16</node>
+                <tag>actionsRenderingEngine</tag>
+        </module>
+		
+		<module>
+                <name>iCubWorldManager</name>  
+				<parameters>--observe_human_time_training 10 --observe_human_time_classify 10 --single_operator_time 5</parameters>
+                <node>icub12</node>
+                <tag>managerOnTheFly_iCubWorld</tag>
+        </module>
+
+        <module>
+                <name>yarpview</name>
+                <parameters>--name /opt/nearBlobber</parameters>
+                <node>icub12</node>
+                <tag>viewer_blobber</tag>
+        </module>
+
+        <module>
+                <name>yarpview</name>
+                <parameters>--name /show/iCubWorldManager</parameters>
+                <node>icub12</node>
+                <tag>viewer_box</tag>
+        </module>
+		
+        <!-- Connections -->
+
+
+        <!-- motionCUT -->
+        <connection>
+                <from>/icub/camcalib/left/out</from>
+                <to>/motionCUT/left/img:i</to>
+                <protocol>mcast</protocol>
+        </connection> 
+        
+        <!-- nearBlobber -->
+        <connection>
+                <from external="true">/SFM/disp:o</from>
+                <to external="true">/nearBlobber/img:i</to>
+                <protocol>udp</protocol>
+        </connection> 
+
+
+        <!-- ActionsRenderingEngine -->
+        <connection>
+                <from>/motionCUT/left/blobs:o</from>
+                <to>/actionsRenderingEngine/left/blobs:i</to>
+                <protocol>udp</protocol>
+        </connection>
+
+        <connection>
+                <from>/nearBlobber/blobs:o</from>
+                <to>/actionsRenderingEngine/left/blobs:i</to>
+                <protocol>udp</protocol>
+        </connection>
+
+
+        <!-- Coding -->
+        <connection>
+                <from>/icub/camcalib/left/out</from>
+                <to>/iCubWorldManager/img:i</to>
+                <protocol>mcast</protocol>
+        </connection>
+
+        <connection>
+                <from>/motionCUT/left/blobs:o</from>
+                <to>/iCubWorldManager/blobs:i</to>
+                <protocol>mcast</protocol>
+        </connection>
+        
+        <connection>
+                <from>/nearBlobber/blobs:o</from>
+                <to>/iCubWorldManager/blobs:i</to>
+                <protocol>mcast</protocol>
+        </connection>
+
+
+        <!-- ActionsRenderingEngine -->
+		
+        <connection>
+                <from>/iCubWorldManager/are/rpc</from>
+                <to>/actionsRenderingEngine/rpc</to>
+                <protocol>tcp</protocol>
+        </connection>
+        
+        <connection>
+                <from>/iCubWorldManager/are/hand:io</from>
+                <to>/actionsRenderingEngine/get:io</to>
+                <protocol>tcp</protocol>
+        </connection>
+
+        <connection>
+                <from>/iCubWorldManager/are/get:io</from>
+                <to>/actionsRenderingEngine/get:io</to>
+                <protocol>tcp</protocol>
+        </connection>
+
+        <connection>
+                <from>/iCubWorldManager/are/cmd:io</from>
+                <to>/actionsRenderingEngine/cmd:io</to>
+                <protocol>tcp</protocol>
+        </connection>
+
+        <!-- Visualization -->
+		
+        <connection>
+                <from>/iCubWorldManager/show:o</from>
+                <to>/show/iCubWorldManager</to>
+                <protocol>mcast</protocol>
+        </connection>
+
+         <connection>
+                <from>/nearBlobber/opt:o</from>
+                <to>/opt/nearBlobber</to>
+                <protocol>mcast</protocol>
+        </connection>
+        
+        
+</application>

@@ -26,3 +26,13 @@
 *.exe
 *.out
 *.app
+
+# Build files
+build/
+
+# Temporary LINUX files
+*.*~
+
+# Eclipse projects
+.cproject
+.project
