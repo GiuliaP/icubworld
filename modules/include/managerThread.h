@@ -81,7 +81,6 @@ private:
 	TransformerThread                   *thr_transformer;
 
 	//rpc are
-	RpcClient                           port_rpc_are;
 	RpcClient                           port_rpc_are_get;
 	RpcClient                           port_rpc_are_cmd;
 

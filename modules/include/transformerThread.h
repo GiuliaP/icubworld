@@ -79,13 +79,22 @@ private:
     //input
     BufferedPort<Image>                 port_in_img;
     BufferedPort<Bottle>                port_in_blobs;
+    BufferedPort<Bottle>				port_in_roi;
+
+    BufferedPort<Image>					port_in_img_right;
+    BufferedPort<Bottle>				port_in_blobs_right;
+    BufferedPort<Bottle>				port_in_roi_right;
 
     //output
     Port                                port_out_show;
+    Port								port_out_show_right;
+
     Port                                port_out_crop;
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     Port                                port_out_img;
+    Port								port_out_img_right;
     Port                                port_out_imginfo;
+    Port								port_out_imginfo_right;
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //rpc
     RpcClient                           port_rpc_are_get_hand;
@@ -93,6 +102,9 @@ private:
     int                                 radius_crop; 
     int                                 radius_crop_robot;
     int                                 radius_crop_human;
+
+    bool								use_disp_roi;
+    bool								acquire_also_right;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     ImageOf<PixelRgb>                   img_crop;
@@ -121,7 +133,7 @@ public:
     
     void set_state(int _state);
 
-    void get_class(string &_current_class);
+    string get_class();
 
     bool execReq(const Bottle &command, Bottle &reply);
 

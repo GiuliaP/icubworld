@@ -221,22 +221,36 @@ bool ManagerThread::observe()
 	if (mode_human)
 	{
 		string nuisance;
-		nuisance = "TRANSLATION";
+		string classname = thr_transformer->get_class();
+
+		nuisance = "TRANSL";
+		thr_transformer->set_class(classname + "_" + nuisance);
 		ok = observe_human(observe_time_transl, nuisance);
 
-		nuisance = "SCALING";
+
+		nuisance = "SCALE";
+		thr_transformer->set_class(classname + "_" + nuisance);
 		ok = observe_human(observe_time_scaling, nuisance);
-		nuisance = "SCALING AND TRANSLATION";
+
+		nuisance = "SCALE_TR";
+		thr_transformer->set_class(classname + "_" + nuisance);
 		ok = observe_human(observe_time_scaling_tr, nuisance);
 
-		nuisance = "2D ROTATION";
+
+		nuisance = "2DROT";
+		thr_transformer->set_class(classname + "_" + nuisance);
 		ok = observe_human(observe_time_2drot, nuisance);
-		nuisance = "2D ROTATION AND TRANSLATION";
+
+		nuisance = "2DROT_TR";
+		thr_transformer->set_class(classname + "_" + nuisance);
 		ok = observe_human(observe_time_2drot_tr, nuisance);
 
-		nuisance = "3D ROTATION";
+		nuisance = "3DROT";
+		thr_transformer->set_class(classname + "_" + nuisance);
 		ok = observe_human(observe_time_3drot, nuisance);
-		nuisance = "3D ROTATION AND TRANSLATION";
+
+		thr_transformer->set_class(classname + "_" + nuisance);
+		nuisance = "3DROT_TR";
 		ok = observe_human(observe_time_3drot_tr, nuisance);
 	}
 	else
@@ -266,7 +280,6 @@ bool ManagerThread::threadInit()
 	thr_transformer->start();
 
 	//rpc
-	port_rpc_are.open(("/"+name+"/are/rpc").c_str());
 	port_rpc_are_get.open(("/"+name+"/are/get:io").c_str());
 	port_rpc_are_cmd.open(("/"+name+"/are/cmd:io").c_str());
 
@@ -419,7 +432,6 @@ void ManagerThread::interrupt()
 {
 	mutex.wait();
 
-	port_rpc_are.interrupt();
 	port_rpc_are_cmd.interrupt();
 	port_rpc_are_cmd.interrupt();
 
@@ -435,7 +447,6 @@ void ManagerThread::threadRelease()
 {
 	mutex.wait();
 
-	port_rpc_are.close();
 	port_rpc_are_cmd.close();
 	port_rpc_are_cmd.close();
 
