@@ -5,45 +5,58 @@
         <!-- Modules -->
         
 	<module>
-                <name>dataDumper</name>
-		<parameters> --name /dump/iCubWorldManager/img:o --dir dumping/imgs --type image</parameters>
+        <name>dataDumper</name>
+		<parameters> --name /dump/iCubWorldManager/img:o --dir dumping/imgs/left --type image</parameters>
 		<node>localhost</node>
-		<tag>dumperImgs</tag>
-        </module>
+		<tag>dumperImg</tag>
+    </module>
+
+    <module>
+        <name>dataDumper</name>
+        <parameters> --name /dump/iCubWorldManager/img/right:o --dir dumping/imgs/right --type image</parameters>
+        <node>localhost</node>
+        <tag>dumperImgRight</tag>
+    </module>
 		
 	<module>
-                <name>dataDumper</name>
-		<parameters> --name /dump/iCubWorldManager/imginfo:o --dir dumping/imginfos --type bottle</parameters>
+        <name>dataDumper</name>
+		<parameters> --name /dump/iCubWorldManager/imginfo:o --dir dumping/imginfos/left --type bottle</parameters>
 		<node>localhost</node>
 		<tag>dumperClasses</tag>
-        </module>
+    </module>
+
+    <module>
+        <name>dataDumper</name>
+        <parameters> --name /dump/iCubWorldManager/imginfo/right:o --dir dumping/imginfos/right --type bottle</parameters>
+        <node>localhost</node>
+        <tag>dumperClasses</tag>
+    </module>
 	
-	<module>
-                <name>dataDumper</name>
-		<parameters> --name /dump/iCubWorldManager/crop:o --dir dumping/crops --type image</parameters>
-		<node>localhost</node>
-		<tag>dumperCrops</tag>
-        </module>
-	
-        <!-- Connections -->
+    <!-- Connections -->
 
 	<connection>
-                <from>/iCubWorldManager/img:o</from>
-                <to>/dump/iCubWorldManager/img:o</to>
-                <protocol>mcast</protocol>
-        </connection>
+        <from>/iCubWorldManager/img:o</from>
+        <to>/dump/iCubWorldManager/img:o</to>
+        <protocol>mcast</protocol>
+    </connection>
+
+    <connection>
+        <from>/iCubWorldManager/img/right:o</from>
+        <to>/dump/iCubWorldManager/img/right:o</to>
+        <protocol>mcast</protocol>
+    </connection>
 		
 	<connection>
-                <from>/iCubWorldManager/imginfo:o</from>
-                <to>/dump/iCubWorldManager/imginfo:o</to>
-                <protocol>tcp</protocol>
-        </connection>
-		
-	<connection>
-                <from>/iCubWorldManager/crop:o</from>
-                <to>/dump/iCubWorldManager/crop:o</to>
-                <protocol>mcast</protocol>
-        </connection>
+        <from>/iCubWorldManager/imginfo:o</from>
+        <to>/dump/iCubWorldManager/imginfo:o</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+    <connection>
+        <from>/iCubWorldManager/imginfo/right:o</from>
+        <to>/dump/iCubWorldManager/imginfo/right:o</to>
+        <protocol>tcp</protocol>
+    </connection>
 		
 </application>
 
