@@ -356,14 +356,14 @@ void TransformerThread::run()
 	cv::Scalar text_color = cv::Scalar(0,255,0);
 	string text_string = class_name;
 
-	if (!coding_interrupted)
-	{
-		text_color = cv::Scalar(255,0,0);
-	}
-
 	if (tracking)
 	{
 		text_color = cv::Scalar(0,0,255);
+
+		if (!coding_interrupted)
+		{
+			text_color = cv::Scalar(255,0,0);
+		}
 	}
 
 	if (found && port_out_show.getOutputCount()>0)
