@@ -355,7 +355,7 @@ void TransformerThread::run()
 		}
 	}
 
-	cv::Scalar text_color = cv::Scalar(0,0,255);
+	cv::Scalar text_color = cv::Scalar(0,255,0);
 	string text_string = class_name;
 
 	if (state == STATE_OBSERVING)
@@ -374,7 +374,7 @@ void TransformerThread::run()
 		cv::rectangle (imgMat, imgRoi, text_color, 2);
 		cv::circle(imgMat, cv::Point(x,y), 8,  text_color, -1, 8, 0 );
 
-		cv::putText(imgMat,text_string.c_str(), cv::Point(imgRoi.tl().x,y_text), cv::FONT_HERSHEY_SIMPLEX, 0.8, text_color, 3.0);
+		cv::putText(imgMat,text_string.c_str(), cv::Point(imgRoi.tl().x,y_text), cv::FONT_HERSHEY_SIMPLEX, 2, text_color, 3.0);
 		port_out_show.write(*img);
 	}
 
@@ -388,7 +388,7 @@ void TransformerThread::run()
 		cv::rectangle (imgMat_right, imgRoi_right, text_color, 2);
 		cv::circle(imgMat_right, cv::Point(x_right,y_right), 8,  text_color, -1, 8, 0 );
 
-		cv::putText(imgMat_right,text_string.c_str(), cv::Point(imgRoi_right.tl().x,y_text), cv::FONT_HERSHEY_SIMPLEX, 0.8, text_color, 3.0);
+		cv::putText(imgMat_right,text_string.c_str(), cv::Point(imgRoi_right.tl().x,y_text), cv::FONT_HERSHEY_SIMPLEX, 2, text_color, 3.0);
 		port_out_show_right.write(*img_right);
 	}
 

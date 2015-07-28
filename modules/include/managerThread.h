@@ -117,7 +117,7 @@ private:
 
 	bool observe_robot();
 
-	bool observe_human(double period, string nuisance);
+	bool observe_human(double period, string classname, string nuisance);
 
 	bool observe();
 

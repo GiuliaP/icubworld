@@ -131,7 +131,7 @@ bool ManagerThread::observe_robot()
 	return true;
 }
 
-bool ManagerThread::observe_human(double period, string nuisance)
+bool ManagerThread::observe_human(double period, string classname, string nuisance)
 {
 
 	Bottle cmd_are,reply_are;
@@ -169,13 +169,13 @@ bool ManagerThread::observe_human(double period, string nuisance)
 
 	Time::delay(single_operator_time);
 
-	string classname = thr_transformer->get_class();
-	thr_transformer->set_class(classname + "_" + nuisance + "3");
+	thr_transformer->set_class(classname + "_" + nuisance + " 3");
 	Time::delay(1.0);
-	thr_transformer->set_class(classname + "_" + nuisance + "2");
+	thr_transformer->set_class(classname + "_" + nuisance + " 2");
 	Time::delay(1.0);
-	thr_transformer->set_class(classname + "_" + nuisance + "1");
+	thr_transformer->set_class(classname + "_" + nuisance + " 1");
 	Time::delay(1.0);
+	thr_transformer->set_class(classname + "_" + nuisance);
 
 	speak("*************************** Image acquisition started:" + nuisance);
 
@@ -184,6 +184,8 @@ bool ManagerThread::observe_human(double period, string nuisance)
 	thr_transformer->interruptCoding();
 
 	speak("*************************** Image acquisition done:" + nuisance);
+
+	thr_transformer->set_class(classname);
 
 	reply_are.clear();
 	cmd_are.clear();
@@ -229,27 +231,42 @@ bool ManagerThread::observe()
 	if (mode_human)
 	{
 		string nuisance;
+		string classname;
+
+		classname = thr_transformer->get_class();
 
 		nuisance = "TRANSL";
-		ok = observe_human(observe_time_transl, nuisance);
+		ok = observe_human(observe_time_transl, classname, nuisance);
+
+		Time::delay(single_operator_time);
 
 		nuisance = "SCALE";
-		ok = observe_human(observe_time_scaling, nuisance);
+		ok = observe_human(observe_time_scaling, classname, nuisance);
+
+		Time::delay(single_operator_time);
 
 		nuisance = "SCALE_TR";
-		ok = observe_human(observe_time_scaling_tr, nuisance);
+		ok = observe_human(observe_time_scaling_tr, classname, nuisance);
+
+		Time::delay(single_operator_time);
 
 		nuisance = "2DROT";
-		ok = observe_human(observe_time_2drot, nuisance);
+		ok = observe_human(observe_time_2drot, classname, nuisance);
+
+		Time::delay(single_operator_time);
 
 		nuisance = "2DROT_TR";
-		ok = observe_human(observe_time_2drot_tr, nuisance);
+		ok = observe_human(observe_time_2drot_tr, classname, nuisance);
+
+		Time::delay(single_operator_time);
 
 		nuisance = "3DROT";
-		ok = observe_human(observe_time_3drot, nuisance);
+		ok = observe_human(observe_time_3drot, classname, nuisance);
+
+		Time::delay(single_operator_time);
 
 		nuisance = "3DROT_TR";
-		ok = observe_human(observe_time_3drot_tr, nuisance);
+		ok = observe_human(observe_time_3drot_tr, classname, nuisance);
 	}
 	else
 		ok = observe_robot();
