@@ -30,7 +30,7 @@ bool TransformerThread::threadInit()
 	radius_crop_robot = rf.check("radius_crop_robot",Value(128)).asInt();
 	radius_crop_human = rf.check("radius_crop_human",Value(128)).asInt();
 
-	use_disp_roi = rf.check("use_disp_roi");
+	acquire_disp_roi = rf.check("acquire_disp_roi");
 	acquire_also_right = rf.check("acquire_also_right");
 
 	radius_crop = radius_crop_human;
@@ -119,6 +119,13 @@ void TransformerThread::run()
 			y = window->get(1).asInt();
 			pixelCount = window->get(2).asInt();
 
+			if (img->width()==640)
+			{
+				x *= 2;
+				y *= 2;
+				pixelCount *= 4;
+			}
+
 			radius_crop = radius_crop_human;
 
 			found = true;
@@ -134,11 +141,17 @@ void TransformerThread::run()
 				x_right = window->get(0).asInt();
 				y_right = window->get(1).asInt();
 
+				if (img_right->width()==640)
+				{
+					x_right *= 2;
+					y_right *= 2;
+				}
+
 				found_right = true;
 			}
 		}
 
-		if (use_disp_roi)
+		if (acquire_disp_roi)
 		{
 			Bottle *roi, *roi_right;
 
@@ -152,6 +165,14 @@ void TransformerThread::run()
 				brx = window->get(2).asInt();
 				bry = window->get(3).asInt();
 
+				if (img->width()==640)
+				{
+					tlx *= 2;
+					tly *= 2;
+					brx *= 2;
+					bry *= 2;
+				}
+
 				imgRoi = cv::Rect (cv::Point( tlx, tly ), cv::Point( brx, bry ));
 			}
 
@@ -164,8 +185,16 @@ void TransformerThread::run()
 					Bottle *window = roi_right->get(0).asList();
 					tlx_right = window->get(0).asInt();
 					tly_right = window->get(1).asInt();
-					brx_right = window->get(5).asInt();
-					bry_right = window->get(6).asInt();
+					brx_right = window->get(2).asInt();
+					bry_right = window->get(3).asInt();
+
+					if (img_right->width()==640)
+					{
+						tlx_right *= 2;
+						tly_right *= 2;
+						brx_right *= 2;
+						bry_right *= 2;
+					}
 
 					imgRoi_right = cv::Rect (cv::Point( tlx_right, tly_right ), cv::Point( brx_right, bry_right ));
 				}
@@ -220,6 +249,12 @@ void TransformerThread::run()
 		{
 			x = reply_are_hand.get(2).asInt();
 			y = reply_are_hand.get(3).asInt();
+
+			if (img->width()==640)
+			{
+				x *= 2;
+				y *= 2;
+			}
 
 			pixelCount = -1;
 
@@ -277,7 +312,7 @@ void TransformerThread::run()
 				if (mode==MODE_HUMAN)
 				{
 					imginfo.addDouble(stamp_b.getTime());
-					if (use_disp_roi)
+					if (acquire_disp_roi)
 					{
 						imginfo.addInt(imgRoi.x);
 						imginfo.addInt(imgRoi.y);
@@ -337,6 +372,8 @@ void TransformerThread::run()
 
 		cv::Mat imgMat = cv::Mat( (IplImage*)img->getIplImage() );
 		cv::rectangle (imgMat, imgRoi, cv::Scalar(0,255,0), 2);
+		cv::circle(imgMat, cv::Point(x,y), 4,  cv::Scalar(0,255,0), -1, 8, 0 );
+
 		cv::putText(imgMat,text_string.c_str(), cv::Point(imgRoi.tl().x,y_text), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(0,0,255), 3.0);
 		port_out_show.write(*img);
 	}
@@ -349,6 +386,8 @@ void TransformerThread::run()
 
 		cv::Mat imgMat_right = cv::Mat( (IplImage*)img_right->getIplImage() );
 		cv::rectangle (imgMat_right, imgRoi_right, cv::Scalar(0,255,0), 2);
+		cv::circle(imgMat_right, cv::Point(x_right,y_right), 4,  cv::Scalar(0,255,0), -1, 8, 0 );
+
 		cv::putText(imgMat_right,text_string.c_str(), cv::Point(imgRoi_right.tl().x,y_text), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(0,0,255), 3.0);
 		port_out_show_right.write(*img_right);
 	}

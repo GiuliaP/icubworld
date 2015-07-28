@@ -103,7 +103,7 @@ private:
     int                                 radius_crop_robot;
     int                                 radius_crop_human;
 
-    bool								use_disp_roi;
+    bool								acquire_disp_roi;
     bool								acquire_also_right;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
