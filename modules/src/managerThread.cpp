@@ -26,8 +26,6 @@ using namespace yarp::math;
 void ManagerThread::set_state(int _state)
 {
 	state =_state;
-	thr_transformer->set_state(state);
-
 }
 
 void ManagerThread::set_mode(int _mode)
@@ -152,6 +150,8 @@ bool ManagerThread::observe_human(double period, string classname, string nuisan
 		if(reply_are.size()>0 && reply_are.get(0).asVocab()==ACK)
 		{
 			speak("Begin tracking mode.");
+			thr_transformer->set_tracking(true);
+
 		}
 		else
 		{
@@ -169,7 +169,7 @@ bool ManagerThread::observe_human(double period, string classname, string nuisan
 
 	Time::delay(single_operator_time);
 
-	thr_transformer->set_class(nuisance + "3");
+	thr_transformer->set_class(nuisance + " 3");
 	Time::delay(1.0);
 	thr_transformer->set_class(nuisance + " 2");
 	Time::delay(1.0);
@@ -196,6 +196,7 @@ bool ManagerThread::observe_human(double period, string classname, string nuisan
 	if(reply_are.size()>0 && reply_are.get(0).asVocab()==ACK)
 	{
 		speak("End tracking mode.");
+		thr_transformer->set_tracking(false);
 
 		//reply_are.clear();
 		//cmd_are.clear();

@@ -114,11 +114,7 @@ private:
 
     bool                                coding_interrupted;
     int                                 mode;
-    int                                 state;
-    
-    double                              blink_init_time;
-    double                              blink_visible_time;
-    double                              blink_invisible_time;
+    bool								tracking;
 
 public:
     TransformerThread(ResourceFinder &_rf) : RateThread(5), rf(_rf) { }
@@ -129,9 +125,9 @@ public:
    
     void set_class(string _class);
   
+    void set_tracking (bool _tracking);
+
     void set_mode(int _mode);
-    
-    void set_state(int _state);
 
     string get_class();
 

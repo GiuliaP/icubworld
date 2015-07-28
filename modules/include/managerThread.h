@@ -103,6 +103,7 @@ private:
 
 	bool                                mode_human;
 	int                                 state;
+	bool								tracking;
 
 	double                              reset_label_time;
 	double                              curr_time;

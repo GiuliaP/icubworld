@@ -62,11 +62,9 @@ bool TransformerThread::threadInit()
 
 	class_name = "?";
 
-	coding_interrupted=true;
+	coding_interrupted = true;
 
-	blink_init_time = Time::now();
-	blink_visible_time = 0.5;
-	blink_invisible_time = 0.0;
+	tracking = false;
 
 	return true;
 }
@@ -363,6 +361,11 @@ void TransformerThread::run()
 		text_color = cv::Scalar(255,0,0);
 	}
 
+	if (tracking)
+	{
+		text_color = cv::Scalar(0,0,255);
+	}
+
 	if (found && port_out_show.getOutputCount()>0)
 	{
 		int y_text = imgRoi.tl().y - 10;
@@ -399,17 +402,15 @@ void TransformerThread::set_class(string _class)
 	class_name = _class;
 }
 
+void TransformerThread::set_tracking(bool _tracking)
+{
+	tracking = _tracking;
+}
+
 void TransformerThread::set_mode(int _mode)
 {
 	mutex.wait();
 	mode=_mode;
-	mutex.post();
-}
-
-void TransformerThread::set_state(int _state)
-{
-	mutex.wait();
-	state=_state;
 	mutex.post();
 }
 
