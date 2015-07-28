@@ -239,32 +239,32 @@ bool ManagerThread::observe()
 		nuisance = "TRANSL";
 		ok = observe_human(observe_time_transl, classname, nuisance);
 
-		Time::delay(single_operator_time);
+		//Time::delay(single_operator_time);
 
 		nuisance = "SCALE";
 		ok = observe_human(observe_time_scaling, classname, nuisance);
 
-		Time::delay(single_operator_time);
+		//Time::delay(single_operator_time);
 
 		nuisance = "SCALE_TR";
 		ok = observe_human(observe_time_scaling_tr, classname, nuisance);
 
-		Time::delay(single_operator_time);
+		//Time::delay(single_operator_time);
 
 		nuisance = "2DROT";
 		ok = observe_human(observe_time_2drot, classname, nuisance);
 
-		Time::delay(single_operator_time);
+		//Time::delay(single_operator_time);
 
 		nuisance = "2DROT_TR";
 		ok = observe_human(observe_time_2drot_tr, classname, nuisance);
 
-		Time::delay(single_operator_time);
+		//Time::delay(single_operator_time);
 
 		nuisance = "3DROT";
 		ok = observe_human(observe_time_3drot, classname, nuisance);
 
-		Time::delay(single_operator_time);
+		//Time::delay(single_operator_time);
 
 		nuisance = "3DROT_TR";
 		ok = observe_human(observe_time_3drot_tr, classname, nuisance);
@@ -283,9 +283,9 @@ bool ManagerThread::threadInit()
 	observe_time_baseline = rf.check("observe_time_transl", Value(10)).asDouble();;
 
 	observe_time_transl = rf.check("observe_time_transl", Value(observe_time_baseline)).asDouble();
-	observe_time_2drot = rf.check("observe_time_2drot", Value(observe_time_baseline/2)).asDouble();
+	observe_time_2drot = rf.check("observe_time_2drot", Value(observe_time_baseline)).asDouble();
 	observe_time_2drot_tr = rf.check("observe_time_2drot_tr", Value(observe_time_baseline)).asDouble();
-	observe_time_scaling = rf.check("observe_time_scaling", Value(observe_time_baseline/2)).asDouble();
+	observe_time_scaling = rf.check("observe_time_scaling", Value(observe_time_baseline)).asDouble();
 	observe_time_scaling_tr = rf.check("observe_time_scaling_tr", Value(observe_time_baseline)).asDouble();
 	observe_time_3drot = rf.check("observe_time_3drot", Value(observe_time_baseline)).asDouble();
 	observe_time_3drot_tr = rf.check("observe_time_3drot_tr", Value(observe_time_baseline)).asDouble();
