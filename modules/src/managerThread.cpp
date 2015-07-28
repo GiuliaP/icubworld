@@ -169,6 +169,14 @@ bool ManagerThread::observe_human(double period, string nuisance)
 
 	Time::delay(single_operator_time);
 
+	string classname = thr_transformer->get_class();
+	thr_transformer->set_class(classname + "_" + nuisance + "3");
+	Time::delay(1.0);
+	thr_transformer->set_class(classname + "_" + nuisance + "2");
+	Time::delay(1.0);
+	thr_transformer->set_class(classname + "_" + nuisance + "1");
+	Time::delay(1.0);
+
 	speak("*************************** Image acquisition started:" + nuisance);
 
 	thr_transformer->resumeCoding();
@@ -187,21 +195,21 @@ bool ManagerThread::observe_human(double period, string nuisance)
 	{
 		speak("End tracking mode.");
 
-		reply_are.clear();
-		cmd_are.clear();
+		//reply_are.clear();
+		//cmd_are.clear();
 
-		cmd_are.addString("home");
-		port_rpc_are_cmd.write(cmd_are,reply_are);
+		//cmd_are.addString("home");
+		//port_rpc_are_cmd.write(cmd_are,reply_are);
 
-		if(reply_are.size()>0 && reply_are.get(0).asVocab()==ACK)
-		{
-			speak("Home position reached.");
-		}
-		else
-		{
-			speak("Cannot set ARE to 'home'.");
-			return false;
-		}
+		//if(reply_are.size()>0 && reply_are.get(0).asVocab()==ACK)
+		//{
+			///speak("Home position reached.");
+		//}
+		//else
+		//{
+			//speak("Cannot set ARE to 'home'.");
+			//return false;
+		//}
 	}
 	else
 	{
@@ -221,35 +229,25 @@ bool ManagerThread::observe()
 	if (mode_human)
 	{
 		string nuisance;
-		string classname = thr_transformer->get_class();
 
 		nuisance = "TRANSL";
-		thr_transformer->set_class(classname + "_" + nuisance);
 		ok = observe_human(observe_time_transl, nuisance);
 
-
 		nuisance = "SCALE";
-		thr_transformer->set_class(classname + "_" + nuisance);
 		ok = observe_human(observe_time_scaling, nuisance);
 
 		nuisance = "SCALE_TR";
-		thr_transformer->set_class(classname + "_" + nuisance);
 		ok = observe_human(observe_time_scaling_tr, nuisance);
 
-
 		nuisance = "2DROT";
-		thr_transformer->set_class(classname + "_" + nuisance);
 		ok = observe_human(observe_time_2drot, nuisance);
 
 		nuisance = "2DROT_TR";
-		thr_transformer->set_class(classname + "_" + nuisance);
 		ok = observe_human(observe_time_2drot_tr, nuisance);
 
 		nuisance = "3DROT";
-		thr_transformer->set_class(classname + "_" + nuisance);
 		ok = observe_human(observe_time_3drot, nuisance);
 
-		thr_transformer->set_class(classname + "_" + nuisance);
 		nuisance = "3DROT_TR";
 		ok = observe_human(observe_time_3drot_tr, nuisance);
 	}

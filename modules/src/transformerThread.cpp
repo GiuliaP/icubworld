@@ -371,10 +371,10 @@ void TransformerThread::run()
 			y_text = imgRoi.br().y + 2;
 
 		cv::Mat imgMat = cv::Mat( (IplImage*)img->getIplImage() );
-		cv::rectangle (imgMat, imgRoi, cv::Scalar(0,255,0), 2);
-		cv::circle(imgMat, cv::Point(x,y), 4,  cv::Scalar(0,255,0), -1, 8, 0 );
+		cv::rectangle (imgMat, imgRoi, text_color, 2);
+		cv::circle(imgMat, cv::Point(x,y), 8,  text_color, -1, 8, 0 );
 
-		cv::putText(imgMat,text_string.c_str(), cv::Point(imgRoi.tl().x,y_text), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(0,0,255), 3.0);
+		cv::putText(imgMat,text_string.c_str(), cv::Point(imgRoi.tl().x,y_text), cv::FONT_HERSHEY_SIMPLEX, 0.8, text_color, 3.0);
 		port_out_show.write(*img);
 	}
 
@@ -385,10 +385,10 @@ void TransformerThread::run()
 			y_text = imgRoi_right.br().y + 2;
 
 		cv::Mat imgMat_right = cv::Mat( (IplImage*)img_right->getIplImage() );
-		cv::rectangle (imgMat_right, imgRoi_right, cv::Scalar(0,255,0), 2);
-		cv::circle(imgMat_right, cv::Point(x_right,y_right), 4,  cv::Scalar(0,255,0), -1, 8, 0 );
+		cv::rectangle (imgMat_right, imgRoi_right, text_color, 2);
+		cv::circle(imgMat_right, cv::Point(x_right,y_right), 8,  text_color, -1, 8, 0 );
 
-		cv::putText(imgMat_right,text_string.c_str(), cv::Point(imgRoi_right.tl().x,y_text), cv::FONT_HERSHEY_SIMPLEX, 0.8, cv::Scalar(0,0,255), 3.0);
+		cv::putText(imgMat_right,text_string.c_str(), cv::Point(imgRoi_right.tl().x,y_text), cv::FONT_HERSHEY_SIMPLEX, 0.8, text_color, 3.0);
 		port_out_show_right.write(*img_right);
 	}
 
