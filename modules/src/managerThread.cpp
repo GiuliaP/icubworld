@@ -169,11 +169,11 @@ bool ManagerThread::observe_human(double period, string classname, string nuisan
 
 	Time::delay(single_operator_time);
 
-	thr_transformer->set_class(classname + "_" + nuisance + " 3");
+	thr_transformer->set_class(nuisance + "3");
 	Time::delay(1.0);
-	thr_transformer->set_class(classname + "_" + nuisance + " 2");
+	thr_transformer->set_class(nuisance + " 2");
 	Time::delay(1.0);
-	thr_transformer->set_class(classname + "_" + nuisance + " 1");
+	thr_transformer->set_class(nuisance + " 1");
 	Time::delay(1.0);
 	thr_transformer->set_class(classname + "_" + nuisance);
 

@@ -283,7 +283,7 @@ void TransformerThread::run()
 		}
 	}
 
-	if(!coding_interrupted)
+	if (!coding_interrupted)
 	{
 		if (found)
 		{
@@ -358,10 +358,9 @@ void TransformerThread::run()
 	cv::Scalar text_color = cv::Scalar(0,255,0);
 	string text_string = class_name;
 
-	if (state == STATE_OBSERVING)
+	if (!coding_interrupted)
 	{
 		text_color = cv::Scalar(255,0,0);
-		text_string = "look: " + class_name;
 	}
 
 	if (found && port_out_show.getOutputCount()>0)
