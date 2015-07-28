@@ -1,0 +1,112 @@
+<application>
+<name>Calibrated Cameras Bayer 640 x 480 and 320 x 240</name>
+<dependencies>
+</dependencies>
+<module>
+  <name>yarpdev</name>
+  <parameters> --from camera/dragonfly2_config_left_bayer_640_480 </parameters>
+	 <node>pc104</node>
+</module>
+<module>
+  <name>yarpdev</name>
+  <parameters> --from camera/dragonfly2_config_right_bayer_640_480</parameters>
+  <node>pc104</node>
+</module>
+<module>
+  <name>camCalib</name>
+  <parameters>--context cameraCalibration --from icubEyes_640x480.ini --group CAMERA_CALIBRATION_LEFT --name /icub/camcalib640/left</parameters>  
+  <node>icub12</node>
+</module> 
+<module>
+  <name>camCalib</name>
+  <parameters>--context cameraCalibration --from icubEyes_640x480.ini --group CAMERA_CALIBRATION_RIGHT --name /icub/camcalib640/right</parameters> 
+  <node>icub12</node>
+</module> 
+<module>
+  <name>camCalib</name>
+  <parameters>--context cameraCalibration --from icubEyes.ini --group CAMERA_CALIBRATION_LEFT --name /icub/camcalib/left</parameters>  
+  <node>icub12</node>
+</module> 
+<module>
+  <name>camCalib</name>
+  <parameters>--context cameraCalibration --from icubEyes.ini --group CAMERA_CALIBRATION_RIGHT --name /icub/camcalib/right</parameters> 
+  <node>icub12</node>
+</module> 
+<module>
+  <name>yarpview</name>
+  <parameters>--name /icub/view640/left --x 0 --y 0 --p 50</parameters>
+  <node>icub16</node>
+</module>
+<module>
+  <name>yarpview</name>
+  <parameters>--name /icub/view640/right --x 320 --y 0 --p 50</parameters>
+  <node>icub16</node>
+</module>
+<module>
+  <name>yarpview</name>
+  <parameters>--name /icub/view/left --x 0 --y 0 --p 50</parameters>
+  <node>icub16</node>
+</module>
+<module>
+  <name>yarpview</name>
+  <parameters>--name /icub/view/right --x 320 --y 0 --p 50</parameters>
+  <node>icub16</node>
+</module>
+<module>
+  <name>frameGrabberGui2</name>
+	<parameters>--local /icub/fggui/left --remote /icub/cam/left --x 0 --y 350 --width 350 --height 500</parameters>
+  <node>icub16</node>
+	<dependencies>
+  <port timeout="10">/icub/cam/left</port>
+  </dependencies>	  
+</module>
+<module>
+  <name>frameGrabberGui2</name>
+	<parameters>--local /icub/fggui/right --remote /icub/cam/right --x 320 --y 350 --width 350 --height 500</parameters>
+  <node>icub16</node>
+	<dependencies>
+  <port timeout="10">/icub/cam/right</port>
+  </dependencies>	  
+</module>
+<connection>
+  <output>/icub/cam/left</output>
+  <input>/icub/camcalib640/left/in</input>
+  <protocol>tcp+recv.bayer+method.bilinear</protocol>
+</connection>
+<connection>
+  <output>/icub/cam/right</output>
+  <input>/icub/camcalib640/right/in</input>
+  <protocol>tcp+recv.bayer+method.bilinear</protocol>
+</connection>
+<connection>
+  <output>/icub/cam/left</output>
+  <input>/icub/camcalib/left/in</input>
+  <protocol>tcp+recv.bayer+method.bilinear+size.half</protocol>
+</connection>
+<connection>
+  <output>/icub/cam/right</output>
+  <input>/icub/camcalib/right/in</input>
+  <protocol>tcp+recv.bayer+method.bilinear+size.half</protocol>
+</connection>
+<connection>
+  <output>/icub/camcalib640/left/out</output>
+  <input>/icub/view640/left</input>
+  <protocol>tcp</protocol>
+</connection>
+<connection>
+  <output>/icub/camcalib640/right/out</output>
+  <input>/icub/view640/right</input>
+  <protocol>tcp</protocol>
+</connection>
+<connection>
+  <output>/icub/camcalib/left/out</output>
+  <input>/icub/view/left</input>
+  <protocol>tcp</protocol>
+</connection>
+<connection>
+  <output>/icub/camcalib/right/out</output>
+  <input>/icub/view/right</input>
+  <protocol>tcp</protocol>
+</connection>
+</application>
+
