@@ -22,6 +22,7 @@
 
 #define                 STATE_IDLE          0
 #define                 STATE_OBSERVING     1
+#define					STATE_SKIP			2
 
 #define					MODE_HUMAN			1
 #define					MODE_ROBOT			0
@@ -31,6 +32,8 @@
 
 #define                 CMD_ROBOT           VOCAB4('r','o','b','o')
 #define                 CMD_HUMAN           VOCAB4('h','u','m','a')
+
+#define					CMD_SKIP			VOCAB4('s','k','i','p')
 
 #endif
 
@@ -90,22 +93,17 @@ private:
 	//output
 	Port                                port_out_speech;
 
-	double								observe_time_baseline;
-	double								observe_time_transl;
-	double                              observe_time_scaling;
-	double								observe_time_2drot;
-	double								observe_time_3drot;
-	double								observe_time_scaling_tr;
-	double								observe_time_2drot_tr;
-	double								observe_time_3drot_tr;
+	double								observe_time;
+	double								observe_time_mix;
 
 	double                              single_operator_time;
 
 	bool                                mode_human;
 	int                                 state;
 
-	double                              reset_label_time;
-	double                              curr_time;
+	string								classname;
+	vector<string>						nuisances;
+	int									nuisance_index;
 
 private:
 

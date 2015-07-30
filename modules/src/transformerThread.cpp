@@ -309,6 +309,8 @@ void TransformerThread::run()
 				imginfo.addInt(pixelCount);
 				if (mode==MODE_HUMAN)
 				{
+					double nn = stamp_b.getTime();
+					std::cout << nn << cout;
 					imginfo.addDouble(stamp_b.getTime());
 					if (acquire_disp_roi)
 					{
@@ -397,6 +399,28 @@ void TransformerThread::run()
 	mutex.post();
 }
 
+void TransformerThread::write_skip_signal()
+{
+
+	mutex.wait();
+
+	if (port_out_imginfo.getOutputCount()>0)
+	{
+		Bottle imginfo;
+		imginfo.addString("skip");
+		port_out_imginfo.write(imginfo);
+	}
+
+	if (port_out_imginfo_right.getOutputCount()>0)
+		{
+			Bottle imginfo;
+			imginfo.addString("skip");
+			port_out_imginfo_right.write(imginfo);
+		}
+
+	mutex.post();
+
+}
 void TransformerThread::set_class(string _class)
 {
 	class_name = _class;

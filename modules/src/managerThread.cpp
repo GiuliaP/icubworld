@@ -224,71 +224,13 @@ bool ManagerThread::observe_human(double period, string classname, string nuisan
 
 }
 
-bool ManagerThread::observe()
-{
-
-	bool ok = false;
-
-	if (mode_human)
-	{
-		string nuisance;
-		string classname;
-
-		classname = thr_transformer->get_class();
-
-		nuisance = "TRANSL";
-		ok = observe_human(observe_time_transl, classname, nuisance);
-
-		//Time::delay(single_operator_time);
-
-		nuisance = "SCALE";
-		ok = observe_human(observe_time_scaling, classname, nuisance);
-
-		//Time::delay(single_operator_time);
-
-		nuisance = "SCALE_TR";
-		ok = observe_human(observe_time_scaling_tr, classname, nuisance);
-
-		//Time::delay(single_operator_time);
-
-		nuisance = "2DROT";
-		ok = observe_human(observe_time_2drot, classname, nuisance);
-
-		//Time::delay(single_operator_time);
-
-		nuisance = "2DROT_TR";
-		ok = observe_human(observe_time_2drot_tr, classname, nuisance);
-
-		//Time::delay(single_operator_time);
-
-		nuisance = "3DROT";
-		ok = observe_human(observe_time_3drot, classname, nuisance);
-
-		//Time::delay(single_operator_time);
-
-		nuisance = "3DROT_TR";
-		ok = observe_human(observe_time_3drot_tr, classname, nuisance);
-	}
-	else
-		ok = observe_robot();
-
-	return ok;
-}
-
 bool ManagerThread::threadInit()
 {
 
 	string name = rf.find("name").asString().c_str();
 
-	observe_time_baseline = rf.check("observe_time_transl", Value(10)).asDouble();;
-
-	observe_time_transl = rf.check("observe_time_transl", Value(observe_time_baseline)).asDouble();
-	observe_time_2drot = rf.check("observe_time_2drot", Value(observe_time_baseline)).asDouble();
-	observe_time_2drot_tr = rf.check("observe_time_2drot_tr", Value(observe_time_baseline)).asDouble();
-	observe_time_scaling = rf.check("observe_time_scaling", Value(observe_time_baseline)).asDouble();
-	observe_time_scaling_tr = rf.check("observe_time_scaling_tr", Value(observe_time_baseline)).asDouble();
-	observe_time_3drot = rf.check("observe_time_3drot", Value(observe_time_baseline)).asDouble();
-	observe_time_3drot_tr = rf.check("observe_time_3drot_tr", Value(observe_time_baseline)).asDouble();
+	observe_time = rf.check("observe_time", Value(observe_time)).asDouble();
+	observe_time_mix = rf.check("observe_time_mix", Value(2*observe_time)).asDouble();
 
 	single_operator_time = rf.check("single_operator_time",Value(5.0)).asDouble();
 
@@ -302,35 +244,60 @@ bool ManagerThread::threadInit()
 	//speech
 	port_out_speech.open(("/"+name+"/speech:o").c_str());
 
+	classname = "?";
+
 	thr_transformer->interruptCoding();
 
 	set_state(STATE_IDLE);
 	set_mode(MODE_HUMAN);
 
-	curr_time=Time::now();
-	reset_label_time=5.0;
+	nuisances.push_back("SCALE");
+	nuisances.push_back("2DROT");
+	nuisances.push_back("3DROT");
+	nuisances.push_back("TRANSL");
+	nuisances.push_back("MIX");
+
+	nuisance_index = -1;
 
 	return true;
 }
 
 void ManagerThread::run()
 {
-	if(Time::now()-curr_time > reset_label_time)
-	{
-		thr_transformer->set_class("?");
-		curr_time = Time::now();
-	}
 
-	if(state == STATE_IDLE)
+	if (state == STATE_IDLE)
 		return;
 
 	mutex.wait();
 
 	if (state == STATE_OBSERVING)
 	{
-		observe();
+		if (mode_human)
+		{
+			nuisance_index ++;
+			if (nuisance_index < nuisances.size())
+			{
+				double t = nuisance_index < (nuisances.size()-1) ? observe_time : observe_time_mix;
+				observe_human(t, classname, nuisances[nuisance_index]);
+			} else
+			{
+				set_state(STATE_IDLE);
+				thr_transformer->set_class("?");
+				classname = "?";
+				nuisance_index = -1;
+			}
+		}
+		else
+			observe_robot();
+	}
 
+	if (state == STATE_SKIP)
+	{
 		set_state(STATE_IDLE);
+		thr_transformer->set_class("?");
+		classname = "?";
+		nuisance_index = -1;
+		thr_transformer->write_skip_signal();
 	}
 
 	mutex.post();
@@ -373,6 +340,7 @@ bool ManagerThread::execHumanCmd(Bottle &command, Bottle &reply)
 			string class_name = command.get(1).asString().c_str();
 
 			thr_transformer->set_class(class_name);
+			classname = class_name;
 
 			set_state(STATE_OBSERVING);
 
@@ -434,6 +402,17 @@ bool ManagerThread::execHumanCmd(Bottle &command, Bottle &reply)
 		}
 		else
 			reply.addString("Error: cannot set ARE to 'idle'.");
+
+		mutex.post();
+		break;
+	}
+
+	case CMD_SKIP:
+	{
+		mutex.wait();
+
+		set_state(STATE_SKIP);
+		reply.addVocab(ACK);
 
 		mutex.post();
 		break;

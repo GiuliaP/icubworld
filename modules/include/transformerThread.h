@@ -22,15 +22,18 @@
 
 #define                 STATE_IDLE          0
 #define                 STATE_OBSERVING     1
+#define					STATE_SKIP			2
 
-#define                 MODE_ROBOT          0
-#define                 MODE_HUMAN		    1
+#define					MODE_HUMAN			1
+#define					MODE_ROBOT			0
 
 #define                 CMD_IDLE            VOCAB4('i','d','l','e')
 #define                 CMD_OBSERVE         VOCAB4('o','b','s','e')
 
 #define                 CMD_ROBOT           VOCAB4('r','o','b','o')
 #define                 CMD_HUMAN           VOCAB4('h','u','m','a')
+
+#define					CMD_SKIP			VOCAB4('s','k','i','p')
 
 #endif
 
@@ -141,4 +144,7 @@ public:
 
     void resumeCoding();
     
+    void write_skip_signal();
+
+
 };
