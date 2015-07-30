@@ -32,6 +32,7 @@ bool TransformerThread::threadInit()
 
 	acquire_disp_roi = rf.check("acquire_disp_roi");
 	acquire_also_right = rf.check("acquire_also_right");
+	acquire_also_disp_roi_right = rf.check("acquire_also_disp_roi_right");
 
 	radius_crop = radius_crop_human;
 
@@ -151,7 +152,7 @@ void TransformerThread::run()
 
 		if (acquire_disp_roi)
 		{
-			Bottle *roi, *roi_right;
+			Bottle *roi;
 
 			roi = port_in_roi.read(false);
 			port_in_roi.getEnvelope(stamp_roi);
@@ -173,9 +174,29 @@ void TransformerThread::run()
 
 				imgRoi = cv::Rect (cv::Point( tlx, tly ), cv::Point( brx, bry ));
 			}
+		} else
+		{
+			int radius = std::min(radius_crop,x);
+			radius = std::min(radius,y);
+			radius = std::min(radius,img->width()-x-1);
+			radius = std::min(radius,img->height()-y-1);
 
-			if (acquire_also_right)
+			if(radius>10)
 			{
+				int radius2 = radius<<1;
+
+				tlx = x-radius;
+				tly = y-radius;
+				imgRoi = cv::Rect (tlx, tly, radius2, radius2);
+			}
+		}
+
+		if (acquire_also_right)
+		{
+
+			if (acquire_also_disp_roi_right)
+			{
+				Bottle *roi_right;
 				roi_right = port_in_roi_right.read(false);
 				port_in_roi_right.getEnvelope(stamp_roi_right);
 				if (roi_right!=NULL)
@@ -196,24 +217,7 @@ void TransformerThread::run()
 
 					imgRoi_right = cv::Rect (cv::Point( tlx_right, tly_right ), cv::Point( brx_right, bry_right ));
 				}
-			}
-		} else
-		{
-			int radius = std::min(radius_crop,x);
-			radius = std::min(radius,y);
-			radius = std::min(radius,img->width()-x-1);
-			radius = std::min(radius,img->height()-y-1);
-
-			if(radius>10)
-			{
-				int radius2 = radius<<1;
-
-				tlx = x-radius;
-				tly = y-radius;
-				imgRoi = cv::Rect (tlx, tly, radius2, radius2);
-			}
-
-			if (acquire_also_right)
+			} else
 			{
 				int radius_right = std::min(radius_crop,x_right);
 				radius_right = std::min(radius_right,y_right);
@@ -230,7 +234,6 @@ void TransformerThread::run()
 					imgRoi_right = cv::Rect (tlx_right, tly_right, radius2_right, radius2_right);
 				}
 			}
-
 		}
 	}
 
@@ -309,16 +312,14 @@ void TransformerThread::run()
 				imginfo.addInt(pixelCount);
 				if (mode==MODE_HUMAN)
 				{
-					double nn = stamp_b.getTime();
-					std::cout << nn << cout;
-					imginfo.addDouble(stamp_b.getTime());
+					//imginfo.addDouble(stamp_b.getTime());
 					if (acquire_disp_roi)
 					{
 						imginfo.addInt(imgRoi.x);
 						imginfo.addInt(imgRoi.y);
 						imginfo.addInt(imgRoi.width);
 						imginfo.addInt(imgRoi.height);
-						imginfo.addDouble(stamp_roi.getTime());
+						//imginfo.addDouble(stamp_roi.getTime());
 					}
 				}
 				imginfo.addString(class_name.c_str());
@@ -341,12 +342,16 @@ void TransformerThread::run()
 				Bottle imginfo;
 				imginfo.addInt(x_right);
 				imginfo.addInt(y_right);
-				imginfo.addDouble(stamp_b_right.getTime());
-				imginfo.addInt(imgRoi_right.x);
-				imginfo.addInt(imgRoi_right.y);
-				imginfo.addInt(imgRoi_right.width);
-				imginfo.addInt(imgRoi_right.height);
-				imginfo.addDouble(stamp_roi_right.getTime());
+				//imginfo.addDouble(stamp_b_right.getTime());
+				if (acquire_also_disp_roi_right)
+				{
+					imginfo.addInt(imgRoi_right.x);
+					imginfo.addInt(imgRoi_right.y);
+					imginfo.addInt(imgRoi_right.width);
+					imginfo.addInt(imgRoi_right.height);
+					//imginfo.addDouble(stamp_roi_right.getTime());
+				}
+
 				imginfo.addString(class_name.c_str());
 
 				port_out_imginfo_right.setEnvelope(stamp_right);

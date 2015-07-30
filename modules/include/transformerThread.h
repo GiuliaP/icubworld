@@ -108,6 +108,7 @@ private:
 
     bool								acquire_disp_roi;
     bool								acquire_also_right;
+    bool								acquire_also_disp_roi_right;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     ImageOf<PixelRgb>                   img_crop;
