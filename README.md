@@ -20,7 +20,7 @@ This setup can be customized in different ways, explained in the following.
 The tracking cue that keeps the iCub fixating the object can be either the motion of the object, if the operator moves it continuously, or depth. The latter can be useful because it allows the human to keep the object almost still or move it slowly, in a very natural way, because it exploits the assumption that, in this setting, the object of interest is almost surely the closest to the robot in the visual field. 
 
 To use the motion cue, you can use the `icubworld_motion.xml` application.
-To use the disparity cue, you can use the `icubworld_depth.xml application.
+To use the disparity cue, you can use the `icubworld_depth.xml` application.
 
 ## Setting up the video recordings for each object
 
