@@ -5,7 +5,6 @@
         <dependencies>
                 <port>/icub/camcalib/left/out</port>
                 <port>/icub/camcalib/right/out</port>
-                <port>/iKinGazeCtrl/rpc</port>
         </dependencies>
 
         <!-- Modules -->
@@ -13,64 +12,55 @@
         <module>
             <name>SFM</name>
             <parameters>--elas_setting MIDDLEBURY --elas_ipol_gap_width 20</parameters>
-            <node>icub12</node>
-            <tag>SFM</tag>
+            <node>node1</node>
         </module>
 
 		<module>
-                <name>nearBlobber</name>
-                <parameters>--imW 320 --imH 240 --bufferSize 3 --minBlobSize 400 </parameters>
-                <node>icub12</node>
-                <tag>nearBlobber</tag>
+                <name>dispBlobber</name>
+                <parameters>--imW 320 --imH 240 --bufferSize 3 --minBlobSize 300 </parameters>
+                <node>node1</node>
         </module>
         
 		<module>
                 <name>actionsRenderingEngine</name>
                 <parameters>--motor::eyes_traj_time 2.0 --motor::neck_traj_time 3.5 --motor::block_eyes 0.0</parameters>
-                <node>icub16</node>
-                <tag>actionsRenderingEngine</tag>
+                <node>node2</node>
         </module>
 		
 		<module>
                 <name>iCubWorldManager</name>  
 				<parameters>--observe_time_baseline 10 --single_operator_time 5 --acquire_disp_roi --acquire_also_right </parameters>
-                <node>icub12</node>
-                <tag>iCubWorldManager</tag>
+                <node>node2</node>
         </module>
 
         <module>
             <name>yarpview</name>
             <parameters>--name /matchViewer --x 0</parameters>
-            <node>icub12</node>
-            <tag>matchViewer</tag>
+            <node>node2</node>
         </module>
 
         <module>
             <name>yarpview</name>
-            <parameters>--name /dispViewer --x 330</parameters>
-            <node>icub12</node>
-            <tag>dispViewer</tag>
+            <parameters>--name /dispViewer --x 660</parameters>
+            <node>node2</node>
         </module>
 
         <module>
-                <name>yarpview</name>
-                <parameters>--name /nearBlobberViewer</parameters>
-                <node>icub12</node>
-                <tag>nearBlobberViewer</tag>
+            <name>yarpview</name>
+            <parameters>--name /nearBlobberViewer</parameters>
+            <node>node2</node>
         </module>
 
         <module>
-                <name>yarpview</name>
-                <parameters>--name /iCubWorldShow</parameters>
-                <node>icub12</node>
-                <tag>iCubWorldShow</tag>
+            <name>yarpview</name>
+            <parameters>--name /iCubWorldShow</parameters>
+            <node>node2</node>
         </module>
 
         <module>
                 <name>yarpview</name>
                 <parameters>--name /iCubWorldShowRight</parameters>
-                <node>icub12</node>
-                <tag>iCubWorldShowRight</tag>
+                <node>node2</node>
         </module>
 		
         <!-- Connections -->

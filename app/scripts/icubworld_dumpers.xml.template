@@ -5,31 +5,27 @@
         <!-- Modules -->
         
 	<module>
-        <name>dataDumper</name>
+        <name>yarpdatadumper</name>
 		<parameters> --name /dump/iCubWorldManager/img:o --dir dumping/imgs/left --type image</parameters>
-		<node>localhost</node>
-		<tag>dumperImg</tag>
+		<node>node1</node>
     </module>
 
     <module>
-        <name>dataDumper</name>
+        <name>yarpdatadumper</name>
         <parameters> --name /dump/iCubWorldManager/img/right:o --dir dumping/imgs/right --type image</parameters>
-        <node>localhost</node>
-        <tag>dumperImgRight</tag>
+        <node>node1</node>
     </module>
 		
 	<module>
-        <name>dataDumper</name>
+        <name>yarpdatadumper</name>
 		<parameters> --name /dump/iCubWorldManager/imginfo:o --dir dumping/imginfos/left --type bottle</parameters>
-		<node>localhost</node>
-		<tag>dumperClasses</tag>
+		<node>node1</node>
     </module>
 
     <module>
-        <name>dataDumper</name>
+        <name>yarpdatadumper</name>
         <parameters> --name /dump/iCubWorldManager/imginfo/right:o --dir dumping/imginfos/right --type bottle</parameters>
-        <node>localhost</node>
-        <tag>dumperClasses</tag>
+        <node>node1</node>
     </module>
 	
     <!-- Connections -->
@@ -37,13 +33,13 @@
 	<connection>
         <from>/iCubWorldManager/img:o</from>
         <to>/dump/iCubWorldManager/img:o</to>
-        <protocol>mcast</protocol>
+        <protocol>tcp</protocol>
     </connection>
 
     <connection>
         <from>/iCubWorldManager/img/right:o</from>
         <to>/dump/iCubWorldManager/img/right:o</to>
-        <protocol>mcast</protocol>
+        <protocol>tcp</protocol>
     </connection>
 		
 	<connection>

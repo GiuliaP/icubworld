@@ -1,0 +1,111 @@
+
+<application>
+<name>iCubWorld Acquisition</name>
+
+        <dependencies>
+                <port>/icub/camcalib/left/out</port>
+        </dependencies>
+
+        <!-- Modules -->
+
+		<module>
+                <name>motionCUT</name>
+                <parameters>--name motionCUT/left --coverXratio 0.7 --coverYratio 0.7 --framesPersistence 2 --numThreads 5 --nodesStep 6</parameters>
+                <node>node1</node>
+        </module>
+
+        <module>
+                <name>actionsRenderingEngine</name>
+                <node>node2</node>
+        </module>
+		
+		<module>
+                <name>iCubWorldManager</name>  
+				<parameters>--observe_time_baseline 10 --single_operator_time 5 </parameters>
+                <node>node2</node>
+        </module>
+
+        <module>
+                <name>yarpview</name>
+                <parameters>--name /mCUTViewer</parameters>
+                <node>node2</node>
+        </module>
+
+        <module>
+                <name>yarpview</name>
+                <parameters>--name /iCubWorldShow</parameters>
+                <node>node2</node>
+        </module>
+		
+        <!-- Connections -->
+
+        <!-- motionCUT -->
+
+        <connection>
+                <from>/icub/camcalib/left/out</from>
+                <to>/motionCUT/left/img:i</to>
+                <protocol>tcp</protocol>
+        </connection> 
+
+        <!-- iCubWorldManager -->
+
+        <connection>
+            <from>/icub/camcalib640/left/out</from>
+            <to>/iCubWorld/img:i</to>
+            <protocol>tcp</protocol>
+        </connection>
+        
+        <connection>
+            <from>/motionCUT/left/blobs:o</from>
+            <to>/iCubWorld/blobs:i</to>
+            <protocol>tcp</protocol>
+        </connection>
+
+        <!-- ActionsRenderingEngine -->
+
+        <connection>
+            <from>/motionCUT/left/blobs:o</from>
+            <to>/actionsRenderingEngine/left/blobs:i</to>
+            <protocol>tcp</protocol>
+        </connection>
+		
+        <connection>
+            <from>/iCubWorld/are/rpc</from>
+            <to>/actionsRenderingEngine/rpc</to>
+            <protocol>tcp</protocol>
+        </connection>
+        
+        <connection>
+            <from>/iCubWorld/are/hand:io</from>
+            <to>/actionsRenderingEngine/get:io</to>
+            <protocol>tcp</protocol>
+        </connection>
+
+        <connection>
+             <from>/iCubWorld/are/get:io</from>
+            <to>/actionsRenderingEngine/get:io</to>
+            <protocol>tcp</protocol>
+        </connection>
+
+        <connection>
+            <from>/iCubWorld/are/cmd:io</from>
+            <to>/actionsRenderingEngine/cmd:io</to>
+            <protocol>tcp</protocol>
+        </connection>
+
+        <!-- Visualization -->
+		
+        <connection>
+            <from>/motionCUT/img:o</from>
+            <to>/motionCUTViewer</to>
+            <protocol>tcp</protocol>
+        </connection>
+
+        <connection>
+            <from>/iCubWorld/show:o</from>
+            <to>/iCubWorldShow</to>
+            <protocol>tcp</protocol>
+        </connection>
+        
+        
+</application>
