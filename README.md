@@ -1,4 +1,4 @@
-# icubworld
+# iCubWorld
 
 Demo to collect an annotated dataset of images by recording from the iCub cameras while the robot is focusing on objects shown by a human teacher.
 
