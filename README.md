@@ -7,10 +7,11 @@ The dataset can be used to train or benchmark visual recognition systems offline
 ## Example setup 
 
 An example acquisition setup is the following:
-1. a (human) teacher stands in front of the robot, helding the object that he wants to acquire
-2. the teacher says the name of the object (or type it) and starts showing it to the robot
-3. the robot start focusing on the object and keeps on tracking it for a fixed arbitrary time period, during which the stream of frames coming from the left and right cameras is recorded (together with the detected ROI around the object for each frame) and associated with the object label specified by the operator
-4. the procedure can be repeated for as many objects as desired
+
+1.	a (human) teacher stands in front of the robot, helding the object that he wants to acquire
+2.	the teacher says the name of the object (or type it) and starts showing it to the robot
+3.	the robot start focusing on the object and keeps on tracking it for a fixed arbitrary time period, during which the stream of frames coming from the left and right cameras is recorded (together with the detected ROI around the object for each frame) and associated with the object label specified by the operator
+4.	the procedure can be repeated for as many objects as desired
 
 This setup can be customized in different ways, explained in the following.
 
