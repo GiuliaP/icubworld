@@ -15,20 +15,20 @@ An example acquisition setup is the following:
 
 This setup can be customized in different ways, explained in the following.
 
-## Tracking 
+## Choosing the tracking cue
 
 The tracking cue that keeps the iCub fixating the object can be either the motion of the object, if the operator moves it continuously, or depth. The latter can be useful because it allows the human to keep the object almost still or move it slowly, in a very natural way, because it exploits the assumption that, in this setting, the object of interest is almost surely the closest to the robot in the visual field. 
 
 To use the motion cue, you can use the `icubworld_motion.xml` application.
 To use the disparity cue, you can use the `icubworld_depth.xml application.
 
+## Setting up the video recordings for each object
+
+We provide also for convenience the possibility of acquiring more videos for the same object one after the other. This can be useful for instance to record videos of the object in different conditions or undergoing different transformations. In this case, the operator provides the label of the object once at the beginning and then starts the acquisitions for that object, looking at the visual output of the demo to know when the subsequent video recordings are starting/stopping. The labels for the different videos of the object are customizable as well as the time and delays of the recordings.
+
 ## Trade-off between resolution of acquired images and real-time tracking
 
 Tracking the object by exploiting motion or disparity cues is a task for which we don't need fine details in the frames, but rather real-time performance, in order to obtain a stable fixation. On the other hand, we prefer recording better resolved images for the object recognition dataset. To this end, we perform the tracking by lowering the resolution of the frames to 320x240, while acquiring at the same time full-res 640x480 frames. This is done using the `cameras_calib_bayer_640_480_and_320_240.xml` application file provided.
-
-## Acquiring different modalities
-
-We provide also for convenience the possibility of acquiring more videos for the same object one after the other. This can be useful for instance to record videos of the object in different conditions or undergoing different transformations. In this case, the operator provides the label of the object once at the beginning and then starts the acquisitions for that object, looking at the visual output of the demo to know when the subsequent video recordings are starting/stopping. The labels for the different modalities are customizable as well as the time and delays for the different video recordings.
 
 ## Repeating an acquisition
 
@@ -38,5 +38,16 @@ As it can happen that something wrong prevents the acquisition of a video to be 
 
 As anticipated, once finished the acquisition session a processing phase on the recorded data is necessary in order to, e.g., discard wrong sequences, synchronize the acquired frames with their ROIs, format the dataset into a hierarchy of folders, and so forth. We provide also a series of Matlab files that perform all these operations almost fully automatically, consistently reducing the effort of the operator, that has only to supervision the execution of the scripts.
 
+## Installation 
 
+#### Dependencies 
+
+- [YARP](https://github.com/robotology/yarp)
+- [iCub](https://github.com/robotology/icub-main)
+- [icub-contrib-common](https://github.com/robotology/icub-contrib-common)
+- [OpenCV](http://opencv.org/downloads.html)
+
+## License
+
+Material included here is Copyright of _iCub Facility - Istituto Italiano di Tecnologia_ and is released under the terms of the GPL v2.0 or later. See the file LICENSE for details.
 
