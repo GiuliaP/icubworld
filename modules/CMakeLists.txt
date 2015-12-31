@@ -32,3 +32,4 @@ target_link_libraries(${PROJECTNAME} ${OpenCV_LIBRARIES} ${YARP_LIBRARIES})
 
 install(TARGETS ${PROJECTNAME} DESTINATION bin)
 
+
